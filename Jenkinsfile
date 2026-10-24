@@ -17,42 +17,30 @@ pipeline {
             }
         }
 
-        stage('Check Main Branch') {
-            steps {
-                script {
-                    if (env.BRANCH_NAME != 'main' &&
-                        env.GIT_BRANCH != 'origin/main' &&
-                        env.GIT_BRANCH != 'main') {
-                        error('This pipeline is configured for the main branch only.')
-                    }
-                }
-            }
-        }
-
         stage('Build Application') {
             steps {
-                echo 'Building application...'
-                // Add your application's build command here
+                bat 'dotnet --info'
+                bat 'dotnet restore Homies.sln'
+                bat 'dotnet build Homies.sln --configuration Release --no-restore'
             }
         }
 
         stage('Run All Tests') {
             steps {
-                echo 'Executing all tests...'
-                // Add your application's test command here
+                bat 'dotnet test Homies.sln --configuration Release --no-build'
             }
         }
     }
 
     post {
         success {
-            echo 'Build and tests completed successfully.'
+            echo 'Build successful. All tests passed.'
         }
         failure {
-            echo 'Build or tests failed.'
+            echo 'Build or tests failed. Check the console output.'
         }
         always {
-            echo 'Pipeline finished.'
+            echo 'Jenkins pipeline finished.'
         }
     }
 }
