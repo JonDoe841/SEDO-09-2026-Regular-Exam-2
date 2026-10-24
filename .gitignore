@@ -1,5 +1,5 @@
 # Ignore CLI log file
-cli_log_part2
+cli_log_part2.txt
 
 # .NET build output
 bin/
